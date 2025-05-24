@@ -54,9 +54,18 @@ CreateThread(function()
 		end
 
 		if cache.game == 'redm' then
+			local zoneTypes = { 0, 1, 10, 12, 13 } -- State, Town, District, Print, Written
 			local mount = GetMount(ped)
 			local onMount = IsPedOnMount(ped)
 			cache:set('mount', onMount and mount or false)
+
+			for i = 1, #zoneTypes do
+				local zone = Citizen.InvokeNative(0x43AD8FC02B429D33, GetEntityCoords(ped), zoneTypes[i])
+				if zone then
+					cache:set('zone', zone)
+					break
+				end
+			end
 		end
 
 		local hasWeapon, currentWeapon = GetCurrentPedWeapon(ped, true)
